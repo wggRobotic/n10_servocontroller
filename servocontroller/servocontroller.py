@@ -38,13 +38,13 @@ class ServoController(Node):
         if len(msg.data) == 6:
             for i, angle in enumerate(msg.data):
                 if 0 <= i < len(self.wheel_servo_channels):
-                    move_to_angle(angle_servo_channels[i], angle)
+                    move_to_angle(angle_servo_channels[i], angle+90)
 
     def arm_control_callback(self, msg):
         if len(msg.data) == 3:
             for i, angle in enumerate(msg.data):
                 if 0 <= i < len(self.arm_servo_channels):
-                    move_to_angle(arm_servo_channels[i], angle)
+                    move_to_angle(arm_servo_channels[i], angle+90)
 
     def move_to_angle(channel, angle):
         self.kit.servo[channel].angle = angle
