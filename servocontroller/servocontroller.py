@@ -1,5 +1,6 @@
 from adafruit_servokit import ServoKit
 import time
+import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 
@@ -9,7 +10,7 @@ class ServoController(Node):
 
         super().__init__('n10_servo_controller')
 
-        self.kit = ServoKit(channels==16)
+        self.kit = ServoKit(channels=16)
         for i in range(9):
             self.kit.servo[i].set_pulse_width_range(550, 2500)
 
