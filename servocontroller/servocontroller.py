@@ -8,23 +8,27 @@ from std_msgs.msg import Float32MultiArray
 DUTY_MID = 5200
 DUTY_RANGE = 3300
 
-kit = ServoKit(channels=16)
-
-target_wheel_dutys = [DUTY_MID, DUTY_MID, DUTY_MID, DUTY_MID, DUTY_MID, DUTY_MID]
-current_wheel_dutys = [DUTY_MID, DUTY_MID, DUTY_MID, DUTY_MID, DUTY_MID, DUTY_MID]
-
 class ServoController(Node):
 
     def __init__(self):
 
         super().__init__('n10_servo_controller')
-
-        for i in range(15):
-            kit.servo[i]._pwm_out.duty_cycle = DUTY_MID
-        
+ 
         self.wheel_servo_channels = [0, 1, 2, 3, 4, 5]
         self.arm_servo_channels = [6, 7, 8]
+        
+        self.servo_currently_moving_flag = False
 
+        self.kit = ServoKit(channels=16)
+
+        self.target_dutys = []
+        self.current_dutys = []
+
+        for i in range(15):
+            self.kit.servo[i]._pwm_out.duty_cycle = DUTY_MID
+            self.target_dutys.append(DUTY_MID)
+            self.current_dutys.append(DUTY_MID)
+        
         self.subscription = self.create_subscription(
             Float32MultiArray,
             '/n10/servo_cmd_wheels',
@@ -39,7 +43,7 @@ class ServoController(Node):
             10
         )
 
-        self.timer = self.create_timer(0.02, self.wheel_servo_move)
+        self.timer = self.create_timer(0.01, self.wheel_servo_move)
 
         self.get_logger().info('n10_servo_controller started. listening ...')
 
@@ -47,30 +51,30 @@ class ServoController(Node):
     def wheel_angle_callback(self, msg):
         if len(msg.data) == 6:
             for i, angle in enumerate(msg.data):
-                if 0 <= i < len(self.wheel_servo_channels):
-                    target_wheel_dutys[i] = int(DUTY_MID + angle / math.pi * 2 * DUTY_RANGE)
+                self.target_dutys[self.wheel_servo_channels[i]] = int(DUTY_MID + angle / math.pi * 2 * DUTY_RANGE)
 
     def arm_control_callback(self, msg):
         if len(msg.data) == 3:
             for i, angle in enumerate(msg.data):
-                if 0 <= i < len(self.arm_servo_channels):
-                    pass
+                pass
 
     def wheel_servo_move(self):
-        for i, channel in enumerate(self.wheel_servo_channels):
-            diff = target_wheel_dutys[i] - current_wheel_dutys[i] 
-            
+        for channel in self.wheel_servo_channels:
+            diff = self.target_dutys[channel] - self.current_dutys[channel] 
             if diff != 0:
+                self.servo_currently_moving_flag = False
                 if diff < 100 or diff > 100:
                     if diff > 0:
-                        current_wheel_dutys[i] += 50
+                        self.current_dutys[channel] += 50
                     else:
-                        current_wheel_dutys[i] -= 50
+                        self.current_dutys[channel] -= 50
                 else:
-                    current_wheel_dutys[i] = target_wheel_dutys[i]
+                    self.current_dutys[channel] = self.target_dutys[channel]
 
-                kit.servo[channel]._pwm_out.duty_cycle = current_wheel_dutys[i]
-            
+                self.kit.servo[channel]._pwm_out.duty_cycle = self.current_dutys[channel]
+            else:
+                self.servo_currently_moving_flag = True
+
 def main(args=None):
     rclpy.init(args=args)
 
@@ -79,9 +83,7 @@ def main(args=None):
     try:
         rclpy.spin(n10_servo_controller)
     except KeyboardInterrupt:
-        for i in range(15):
-           kit.servo[i]._pwm_out.duty_cycle = DUTY_MID 
-    
+        pass 
     n10_servo_controller.destroy_node()
     rclpy.shutdown()
 
