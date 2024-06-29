@@ -16,7 +16,7 @@ sudo udevadm trigger
 ```
 relog
 
-# functionality
+# Functionality
  
 nodename `n10_servo_controller`
 
