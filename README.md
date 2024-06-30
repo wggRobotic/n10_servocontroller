@@ -1,28 +1,37 @@
+# Description 
+The servocontroller node to move the 6 servos for wheels and the 3 servos for the robotarm
+
+ros2 name: `n10_servo_controller`
+
+wheel-servo-channels: 0-5, usual wheel enumeration
+
 # Setup
-Your user needs acces to i2c:
+In order to access GPIO for I2C, the user running the node needs I2C permissions:
 ```
 sudo usermod -aG i2c $USER
+```
+Open (file may not exist yet):
+```
 sudo nano /etc/udev/rules.d/99-i2c.rules
 ```
-add these lines (file may not exist yet):
+add these lines:
 ```  
   SUBSYSTEM=="i2c-dev", MODE="0666"
   KERNEL=="i2c-[0-1]*", GROUP="i2c"
 ```
-reload rules
+Reload the rules:
 ```
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
-relog
+Finnally, you may need to relog.
 
-# Functionality
- 
-nodename `n10_servo_controller`
+# Interface
 
-subscribed:
-- `/n10/servo_cmd_wheels` `Float32MultiArray` `length 6`
-  -  control wheelservos -pi/2 to pi/2
-- `/n10/servo_cmd_arm` `Float32MultiArray` `length 6`
-    - control robotarmservos -pi/2 to pi/2
+## subscribed
+- `/n10/servo_cmd_wheels` `std_msgs::msg::Float32MultiArray (6)` : control wheel servos
+  - from `-π/2 ≐ pointing right` to `π/2 ≐ pointing left`
+
+- `/n10/servo_cmd_arm` `std_msgs::msg::Float32MultiArray (3)` : control robotarm servos
+  - from `-π/2 ≐ pointing right` to `π/2 ≐ pointing left`
 
