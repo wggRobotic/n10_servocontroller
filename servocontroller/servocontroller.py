@@ -16,8 +16,6 @@ class ServoController(Node):
  
         self.wheel_servo_channels = [0, 1, 2, 3, 4, 5]
         self.arm_servo_channels = [6, 7, 8]
-        
-        self.servo_currently_moving_flag = False
 
         self.kit = ServoKit(channels=16)
 
@@ -43,7 +41,7 @@ class ServoController(Node):
             10
         )
 
-        self.timer = self.create_timer(0.01, self.wheel_servo_move)
+        self.timer = self.create_timer(0.01, self.servos_move_step)
 
         self.get_logger().info('n10_servo_controller started. listening ...')
 
@@ -56,24 +54,24 @@ class ServoController(Node):
     def arm_control_callback(self, msg):
         if len(msg.data) == 3:
             for i, angle in enumerate(msg.data):
-                pass
+                self.target_dutys[self.arm_servo_channels[i]] = int(DUTY_MID + angle / math.pi * 2 * DUTY_RANGE)
 
-    def wheel_servo_move(self):
-        for channel in self.wheel_servo_channels:
-            diff = self.target_dutys[channel] - self.current_dutys[channel] 
+    def servos_move_step(self):
+        servo_currently_moving_flag = False
+        for i in range(15):
+            diff = self.target_dutys[i] - self.current_dutys[i] 
             if diff != 0:
-                self.servo_currently_moving_flag = False
+                self.servo_currently_moving_flag = True
                 if diff < 100 or diff > 100:
                     if diff > 0:
-                        self.current_dutys[channel] += 50
+                        self.current_dutys[i] += 50
                     else:
-                        self.current_dutys[channel] -= 50
+                        self.current_dutys[i] -= 50
                 else:
-                    self.current_dutys[channel] = self.target_dutys[channel]
+                    self.current_dutys[i] = self.target_dutys[i]
 
-                self.kit.servo[channel]._pwm_out.duty_cycle = self.current_dutys[channel]
-            else:
-                self.servo_currently_moving_flag = True
+                self.kit.servo[i]._pwm_out.duty_cycle = self.current_dutys[i]
+
 
 def main(args=None):
     rclpy.init(args=args)
