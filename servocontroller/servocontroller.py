@@ -36,7 +36,7 @@ class ServoController(Node):
 
         self.subscription = self.create_subscription(
             Float32MultiArray,
-            '/n8/servo_cmd_arm',
+            '/n10/servo_cmd_arm',
             self.arm_control_callback,
             10
         )
