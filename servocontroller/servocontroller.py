@@ -5,8 +5,9 @@ import math
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 
-WHEEL_DUTY_MID = 5200
-WHEEL_DUTY_RANGE = -3300
+DUTY_MID = 5200
+DEG180_DUTY_RANGE = -3300
+DEG270_DUTY_RANGE = 2000
 
 class ServoController(Node):
 
@@ -19,16 +20,13 @@ class ServoController(Node):
 
         self.kit = ServoKit(channels=16)
 
-        self.arm_target_dutys = []
-        self.arm_current_dutys = []
-
         for i, channel in enumerate(wheel_servo_channels):
             self.kit.servo[channel]._pwm_out.duty_cycle = DUTY_MID
 
-        for i, channel in enumerate(arm_servo_channels):
-            self.kit.servo[channel]._pwm_out.duty_cycle = DUTY_MID
-            self.arm_target_dutys.append(DUTY_MID)
-            self.arm_current_dutys.append(DUTY_MID)
+        self.kit.servo[arm_servo_channels[0]]._pwm_out.duty_cycle = DUTY_MID
+        self.kit.servo[arm_servo_channels[1]]._pwm_out.duty_cycle = DUTY_MID
+        self.kit.servo[arm_servo_channels[2]]._pwm_out.duty_cycle = DUTY_MID
+
 
         self.subscription = self.create_subscription(
             Float32MultiArray,
@@ -44,8 +42,6 @@ class ServoController(Node):
             10
         )
 
-        #self.timer = self.create_timer(0.01, self.arm_servos_move_step)
-
         self.get_logger().info('n10_servo_controller started. listening ...')
 
 
@@ -53,29 +49,16 @@ class ServoController(Node):
         if len(msg.data) == 6:
             for i, angle in enumerate(msg.data):
                 if -1.6 <= angle <= 1.6:
-                    self.kit.servo[self.wheel_servo_channels[i]]._pwm_out.duty_cycle = int(WHEEL_DUTY_MID + angle / math.pi * 2 * WHEEL_DUTY_RANGE)
+                    self.kit.servo[self.wheel_servo_channels[i]]._pwm_out.duty_cycle = int(DUTY_MID + angle / math.pi * 2 * DEG180_DUTY_RANGE)
 
     def arm_control_callback(self, msg):
         if len(msg.data) == 3:
-            for i, angle in enumerate(msg.data):
+                if -2.3 <= angle <= 2.3:
+                    self.kit.servo[self.arm_servo_channels[0]]._pwm_out.duty_cycle = int(DUTY_MID - angle / math.pi * 2 * DEG270_DUTY_RANGE)
+                if -2.3 <= angle <= 2.3:
+                    self.kit.servo[self.wheel_servo_channels[1]]._pwm_out.duty_cycle = int(DUTY_MID + angle / math.pi * 2 * DEG270_DUTY_RANGE)
                 if -1.6 <= angle <= 1.6:
-                    self.arm_target_dutys[self.arm_servo_channels[i]] = int(DUTY_MID + angle / math.pi * 2 * DUTY_RANGE)
-
-    def arm_servos_move_step(self):
-        for i, channel in enumerate(arm_servo_channels):
-            diff = self.arm_target_dutys[i] - self.arm_current_dutys[i] 
-
-            if diff != 0:
-                if diff < 200 or diff > 200:
-                    if diff > 0:
-                        self.arm_current_dutys[i] += 100
-                    else:
-                        self.arm_current_dutys[i] -= 100
-                else:
-                    self.arm_current_dutys[i] = self.arm_target_dutys[i]
-
-                self.kit.servo[channel]._pwm_out.duty_cycle = self.arm_current_dutys[i]
-
+                    self.kit.servo[self.wheel_servo_channels[2]]._pwm_out.duty_cycle = int(DUTY_MID + angle / math.pi * 2 * DEG180_DUTY_RANGE)
 
 def main(args=None):
     rclpy.init(args=args)
