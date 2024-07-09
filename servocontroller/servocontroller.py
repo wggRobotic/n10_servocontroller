@@ -20,7 +20,7 @@ class ServoController(Node):
 
         self.kit = ServoKit(channels=16)
 
-        for i, channel in enumerate(wheel_servo_channels):
+        for i, channel in enumerate(self.wheel_servo_channels):
             self.kit.servo[channel]._pwm_out.duty_cycle = DUTY_MID
 
         self.kit.servo[arm_servo_channels[0]]._pwm_out.duty_cycle = DUTY_MID
