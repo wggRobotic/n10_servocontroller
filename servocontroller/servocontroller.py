@@ -23,9 +23,9 @@ class ServoController(Node):
         for i, channel in enumerate(self.wheel_servo_channels):
             self.kit.servo[channel]._pwm_out.duty_cycle = DUTY_MID
 
-        self.kit.servo[arm_servo_channels[0]]._pwm_out.duty_cycle = DUTY_MID
-        self.kit.servo[arm_servo_channels[1]]._pwm_out.duty_cycle = DUTY_MID
-        self.kit.servo[arm_servo_channels[2]]._pwm_out.duty_cycle = DUTY_MID
+        self.kit.servo[self.arm_servo_channels[0]]._pwm_out.duty_cycle = DUTY_MID
+        self.kit.servo[self.arm_servo_channels[1]]._pwm_out.duty_cycle = DUTY_MID
+        self.kit.servo[self.arm_servo_channels[2]]._pwm_out.duty_cycle = DUTY_MID
 
 
         self.subscription = self.create_subscription(
