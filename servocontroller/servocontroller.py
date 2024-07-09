@@ -52,7 +52,7 @@ class ServoController(Node):
         if len(msg.data) == 6:
             for i, angle in enumerate(msg.data):
                 if -1.6 <= angle <= 1.6:
-                    if(self.last_wheel_angles[i] != angle)
+                    if(self.last_wheel_angles[i] != angle):
                         self.kit.servo[self.wheel_servo_channels[i]]._pwm_out.duty_cycle = int(DUTY_MID + angle / math.pi * 2 * DEG180_DUTY_RANGE)
                         self.last_wheel_angles[i] = angle
 
