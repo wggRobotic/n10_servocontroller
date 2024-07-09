@@ -53,11 +53,11 @@ class ServoController(Node):
 
     def arm_control_callback(self, msg):
         if len(msg.data) == 3:
-                if -2.3 <= angle <= 2.3:
+                if -2.3 <= msg.data[0] <= 2.3:
                     self.kit.servo[self.arm_servo_channels[0]]._pwm_out.duty_cycle = int(DUTY_MID - angle / math.pi * 2 * DEG270_DUTY_RANGE)
-                if -2.3 <= angle <= 2.3:
+                if -2.3 <= msg.data[1] <= 2.3:
                     self.kit.servo[self.wheel_servo_channels[1]]._pwm_out.duty_cycle = int(DUTY_MID + angle / math.pi * 2 * DEG270_DUTY_RANGE)
-                if -1.6 <= angle <= 1.6:
+                if -1.6 <= msg.data[2] <= 1.6:
                     self.kit.servo[self.wheel_servo_channels[2]]._pwm_out.duty_cycle = int(DUTY_MID + angle / math.pi * 2 * DEG180_DUTY_RANGE)
 
 def main(args=None):
