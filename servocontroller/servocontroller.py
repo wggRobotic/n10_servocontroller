@@ -24,7 +24,7 @@ class ServoController(Node):
 
         for i, channel in enumerate(self.wheel_servo_channels):
             self.kit.servo[channel]._pwm_out.duty_cycle = DUTY_MID
-            self.last_wheel_angles[i] = DUTY_MID
+            self.last_wheel_angles[i].append(DUTY_MID)
 
         self.kit.servo[self.arm_servo_channels[0]]._pwm_out.duty_cycle = DUTY_MID
         self.kit.servo[self.arm_servo_channels[1]]._pwm_out.duty_cycle = DUTY_MID
