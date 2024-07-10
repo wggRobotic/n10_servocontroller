@@ -67,7 +67,7 @@ class ServoController(Node):
                     self.last_arm_angles[1] = msg.data[1]
             if -1.6 <= msg.data[2] <= 1.6:
                 if(self.last_arm_angles[2] != msg.data[2]):
-                    self.kit.servo[self.arm_servo_channels[2]]._pwm_out.duty_cycle = int(DUTY_MID + msg.data[0] / math.pi * 2 * DEG270_DUTY_RANGE)
+                    self.kit.servo[self.arm_servo_channels[2]]._pwm_out.duty_cycle = int(DUTY_MID + msg.data[0] / math.pi * 2 * DEG180DUTY_RANGE)
                     self.last_arm_angles[2] = msg.data[2]
 
 
