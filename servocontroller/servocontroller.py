@@ -57,19 +57,21 @@ class ServoController(Node):
 
     def arm_control_callback(self, msg):
         if len(msg.data) == 3:
-            if -1.6 <= msg.data[0] <= 1.6:
+            if -2 <= msg.data[0] <= 2:
                 if(self.last_arm_angles[0] != msg.data[0]):
-                    self.kit.servo[self.arm_servo_channels[0]]._pwm_out.duty_cycle = int(DUTY_MID + msg.data[0] / math.pi * 2 * DEG270_DUTY_RANGE)
+                    self.kit.servo[self.arm_servo_channels[0]]._pwm_out.duty_cycle = int(5000 + msg.data[1] / math.pi * 2 * 2100)
                     self.last_arm_angles[0] = msg.data[0]
-
-            if -1.6 <= msg.data[1] <= 0:
+            if -2 <= msg.data[1] <= 2:
                 if(self.last_arm_angles[1] != msg.data[1]):
-                    self.kit.servo[self.arm_servo_channels[1]]._pwm_out.duty_cycle = int(5000 + msg.data[1] / math.pi * 2 * 2100)
+                    self.kit.servo[self.arm_servo_channels[1]]._pwm_out.duty_cycle = int(5100 - msg.data[2] / math.pi * 2 * 2300)
                     self.last_arm_angles[1] = msg.data[1]
-            if -1.6 <= msg.data[2] <= 0:
+            if -1.6 <= msg.data[2] <= 1.6:
                 if(self.last_arm_angles[2] != msg.data[2]):
-                    self.kit.servo[self.arm_servo_channels[2]]._pwm_out.duty_cycle = int(5100 - msg.data[2] / math.pi * 2 * 2300)
+                    self.kit.servo[self.arm_servo_channels[2]]._pwm_out.duty_cycle = int(DUTY_MID + msg.data[0] / math.pi * 2 * DEG270_DUTY_RANGE)
                     self.last_arm_angles[2] = msg.data[2]
+
+
+
 
 def main(args=None):
     rclpy.init(args=args)
