@@ -15,7 +15,7 @@ class ServoController(Node):
         super().__init__('n10_servo_controller')
 
         self.wheel_servo_channels = [1, 2, 6, 3, 5, 4]
-        self.arm_servo_channels = [7, 8, 9]
+        self.arm_servo_channels = [8, 9, 10]
         
         self.kit = ServoKit(channels=16)
 
