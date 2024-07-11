@@ -33,5 +33,6 @@ Finnally, you may need to relog.
   - from `-π/2 ≐ pointing right` to `π/2 ≐ pointing left`
 
 - `/n10/servo_cmd_arm` `std_msgs::msg::Float32MultiArray (3)` : control robotarm servos
-  - from `-π/2 ≐ pointing right` to `π/2 ≐ pointing left`
-
+  - index 0: base_joint `0 ≐ pointing up` `counterclockwise`
+  - index 1: arm_joint `0 ≐ same as base_joint` `counterclockwise`
+  - index 2: gripper state `π/2 ≐ open` `-π/2 ≐ closes`
