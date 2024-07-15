@@ -5,8 +5,9 @@ import math
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 
-DUTY_MID = 5200
-DEG180_DUTY_RANGE = -3300
+WHEEL_DUTY_MID = 5200
+WHEEL_DUTY_RANGE = -3300
+
 
 class ServoController(Node):
 
@@ -14,21 +15,39 @@ class ServoController(Node):
 
         super().__init__('n10_servo_controller')
 
-        self.wheel_servo_channels = [1, 2, 6, 3, 5, 4]
-        self.arm_servo_channels = [8, 9, 10]
-        
         self.kit = ServoKit(channels=16)
 
-        self.last_wheel_angles = []
-        self.last_arm_angles = [DUTY_MID, 5000, 5100]
-        
-        for i, channel in enumerate(self.wheel_servo_channels):
-            self.kit.servo[channel]._pwm_out.duty_cycle = DUTY_MID
-            self.last_wheel_angles.append(DUTY_MID)
+        self.wheel_servo_channels = [1, 2, 6, 3, 5, 4]
+        self.wheel_angle_min = [-1.6, -1.6, -1.6, -1.6, -1.6, -1.6]
+        self.wheel_angle_max = [1.6, 1.6, 1.6, 1.6, 1.6, 1.6]
+        self.wheel_duty_mids = [5200, 5200, 5200, 5200, 5200, 5200]
+        self.wheel_duty_ranges = [-3300, -3300, -3300, -3300, -3300, -3300]
 
-        self.kit.servo[self.arm_servo_channels[0]]._pwm_out.duty_cycle = DUTY_MID
-        self.kit.servo[self.arm_servo_channels[1]]._pwm_out.duty_cycle = 5000
-        self.kit.servo[self.arm_servo_channels[2]]._pwm_out.duty_cycle = 5100
+
+        self.arm_servo_channels = [8, 9, 10, 11]
+        self.arm_angle_min = [-2.3562, -2.3562, -1.6, -1.6]
+        self.arm_angle_max = [0.5236, 2.3562, 1.6, 1.6]
+        self.arm_duty_mids = [5100, 5100, 5100, 5100]
+        self.arm_duty_ranges = [2100, -2300, 3300, 3300]
+        
+
+        self.last_wheel_angles = []
+        self.last_arm_angles = []
+        
+        for i in range(len(self.wheel_servo_channels)):
+            self.last_wheel_angles.append(self.wheel_duty_mids[i])
+
+        self.last_arm_angles.append(self.arm_duty_mids[0])
+        self.last_arm_angles.append(self.arm_duty_mids[1])
+        self.last_arm_angles.append(self.arm_duty_mids[2] - self.arm_duty_ranges[2])
+        self.last_arm_angles.append(self.arm_duty_mids[3])
+
+
+        for i, channel in enumerate(self.wheel_servo_channels):
+            self.kit.servo[channel]._pwm_out.duty_cycle = self.last_wheel_angles[i]
+
+        for i, channel in enumerate(self.arm_servo_channels):
+            self.kit.servo[channel]._pwm_out.duty_cycle = self.last_arm_angles[i]
 
         self.subscription = self.create_subscription(
             Float32MultiArray,
@@ -50,28 +69,18 @@ class ServoController(Node):
     def wheel_angle_callback(self, msg):
         if len(msg.data) == 6:
             for i, angle in enumerate(msg.data):
-                if -1.6 <= angle <= 1.6:
+                if self.wheel_angle_min[i] <= angle <= self.wheel_angle_max[i]:
                     if(self.last_wheel_angles[i] != angle):
-                        self.kit.servo[self.wheel_servo_channels[i]]._pwm_out.duty_cycle = int(DUTY_MID + angle / math.pi * 2 * DEG180_DUTY_RANGE)
+                        self.kit.servo[self.wheel_servo_channels[i]]._pwm_out.duty_cycle = int(self.wheel_duty_mids[i] + angle / math.pi * 2 * self.wheel_duty_ranges[i])
                         self.last_wheel_angles[i] = angle
 
     def arm_control_callback(self, msg):
-        if len(msg.data) == 3:
-            if -2 <= msg.data[0] <= 2:
-                if(self.last_arm_angles[0] != msg.data[0]):
-                    self.kit.servo[self.arm_servo_channels[0]]._pwm_out.duty_cycle = int(5000 + msg.data[0] / math.pi * 2 * 2100)
-                    self.last_arm_angles[0] = msg.data[0]
-            if -2 <= msg.data[1] <= 2:
-                if(self.last_arm_angles[1] != msg.data[1]):
-                    self.kit.servo[self.arm_servo_channels[1]]._pwm_out.duty_cycle = int(5100 - msg.data[1] / math.pi * 2 * 2300)
-                    self.last_arm_angles[1] = msg.data[1]
-            if -1.6 <= msg.data[2] <= 1.6:
-                if(self.last_arm_angles[2] != msg.data[2]):
-                    self.kit.servo[self.arm_servo_channels[2]]._pwm_out.duty_cycle = int(DUTY_MID + msg.data[2] / math.pi * 2 * DEG180_DUTY_RANGE)
-                    self.last_arm_angles[2] = msg.data[2]
-
-
-
+        if len(msg.data) == 4:
+            for i, angle in enumerate(msg.data):
+                if self.arm_angle_min[i] <= angle <= self.arm_angle_max[i]:
+                    if(self.last_arm_angles[i] != angle):
+                        self.kit.servo[self.arm_servo_channels[i]]._pwm_out.duty_cycle = int(self.arm_duty_mids[i] + angle / math.pi * 2 * self.arm_duty_ranges[i])
+                        self.last_arm_angles[i] = angle
 
 def main(args=None):
     rclpy.init(args=args)
