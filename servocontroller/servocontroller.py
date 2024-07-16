@@ -5,10 +5,6 @@ import math
 from rclpy.node import Node
 from std_msgs.msg import Float32MultiArray
 
-WHEEL_DUTY_MID = 5200
-WHEEL_DUTY_RANGE = -3300
-
-
 class ServoController(Node):
 
     def __init__(self):
@@ -27,8 +23,8 @@ class ServoController(Node):
         self.arm_servo_channels = [8, 9, 10, 11]
         self.arm_angle_min = [-2.3562, -2.3562, -1.6, -1.6]
         self.arm_angle_max = [0.5236, 2.3562, 1.6, 1.6]
-        self.arm_duty_mids = [5100, 5100, 5100, 5100]
-        self.arm_duty_ranges = [2100, -2300, 3300, 3300]
+        self.arm_duty_mids = [5050, 5100, 5300, 5100]
+        self.arm_duty_ranges = [2250, -2350, 3400, 3300]
         
 
         self.last_wheel_angles = []
