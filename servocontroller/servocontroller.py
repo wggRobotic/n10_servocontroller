@@ -16,15 +16,15 @@ class ServoController(Node):
         self.wheel_servo_channels = [1, 2, 6, 3, 5, 4]
         self.wheel_angle_min = [-1.6, -1.6, -1.6, -1.6, -1.6, -1.6]
         self.wheel_angle_max = [1.6, 1.6, 1.6, 1.6, 1.6, 1.6]
-        self.wheel_duty_mids = [5200, 5200, 5200, 5200, 5200, 5200]
-        self.wheel_duty_ranges = [-3300, -3300, -3300, -3300, -3300, -3300]
+        self.wheel_duty_mids = [5350, 5250, 5150, 5150, 5200, 5050]
+        self.wheel_duty_ranges = [-3400, -3400, -3400, -3300, -3300, -3300]
 
 
         self.arm_servo_channels = [8, 9, 10, 11]
         self.arm_angle_min = [-2.3562, -2.3562, -1.6, -1.6]
-        self.arm_angle_max = [0.5236, 2.3562, 1.6, 1.6]
-        self.arm_duty_mids = [5050, 5100, 5300, 5100]
-        self.arm_duty_ranges = [2250, -2350, 3400, 3300]
+        self.arm_angle_max = [0.27, 2.3562, 1.31, 1.6]
+        self.arm_duty_mids = [5050, 5150, 5300, 5100]
+        self.arm_duty_ranges = [2250, -2300, 3400, 3300]
         
 
         self.last_wheel_angles = []
@@ -33,9 +33,9 @@ class ServoController(Node):
         for i in range(len(self.wheel_servo_channels)):
             self.last_wheel_angles.append(self.wheel_duty_mids[i])
 
-        self.last_arm_angles.append(self.arm_duty_mids[0])
-        self.last_arm_angles.append(self.arm_duty_mids[1])
-        self.last_arm_angles.append(self.arm_duty_mids[2] - self.arm_duty_ranges[2])
+        self.last_arm_angles.append(0.1326)
+        self.last_arm_angles.append(-1.873)
+        self.last_arm_angles.append(-1.33)
         self.last_arm_angles.append(self.arm_duty_mids[3])
 
 
