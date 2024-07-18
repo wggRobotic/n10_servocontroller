@@ -31,19 +31,21 @@ class ServoController(Node):
         self.last_arm_angles = []
         
         for i in range(len(self.wheel_servo_channels)):
-            self.last_wheel_angles.append(self.wheel_duty_mids[i])
+            self.last_wheel_angles.append(0)
 
         self.last_arm_angles.append(0.1326)
         self.last_arm_angles.append(-1.873)
         self.last_arm_angles.append(-1.33)
-        self.last_arm_angles.append(self.arm_duty_mids[3])
+        self.last_arm_angles.append(0)
 
 
         for i, channel in enumerate(self.wheel_servo_channels):
-            self.kit.servo[channel]._pwm_out.duty_cycle = self.last_wheel_angles[i]
+            self.kit.servo[channel]._pwm_out.duty_cycle = int(self.wheel_duty_mids[i] + self.last_wheel_angles[i] / math.pi * 2 * self.wheel_duty_ranges[i])
+
 
         for i, channel in enumerate(self.arm_servo_channels):
-            self.kit.servo[channel]._pwm_out.duty_cycle = self.last_arm_angles[i]
+            self.kit.servo[channel]._pwm_out.duty_cycle = int(self.arm_duty_mids[i] + self.last_arm_angles[i] / math.pi * 2 * self.arm_duty_ranges[i])
+
 
         self.subscription = self.create_subscription(
             Float32MultiArray,
