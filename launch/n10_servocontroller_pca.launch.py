@@ -17,7 +17,7 @@ def generate_launch_description():
     n10_servocontroller = Node(
         package='n10_servocontroller',
         executable='n10_servocontroller',
-        name='servocontroller_pca',
+        name='servocontroller',
         parameters=[parameter_file],
         namespace="n10",
         output='screen'

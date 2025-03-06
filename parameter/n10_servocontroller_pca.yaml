@@ -1,12 +1,15 @@
-translator:
-  ros__parameters:
-    
-    verbosity: true
+n10:
+  servocontroller:
+    ros__parameters:
 
-    mode: "pca"
+      mode: "pca"
 
-    channel_mappings:    [    0,     1,     2,     3,     4,     5]
-    duty_mids:           [ 5200,  5200,  4900,  5000,  4800,  4800]
-    duty_range_positive: [-3600, -3500, -3400, -3400, -3400, -3500]
-    duty_range_negative: [-3100, -3300, -3200, -3400, -3400, -3400]
+      wheel_channel_mappings:     [    0,     1,     2,     3,     4,     5]
+      wheel_duty_mids:            [ 5200,  5200,  4900,  5000,  4800,  4800]
+      wheel_duty_ranges_positive: [-3600, -3500, -3400, -3400, -3400, -3500]
+      wheel_duty_ranges_negative: [-3100, -3300, -3200, -3400, -3400, -3400]
 
+      gripper_channel_mappings:     [    6,     7,     8,     9]
+      gripper_duty_mids:            [ 5200,  5200,  4900,  5000]
+      gripper_duty_ranges_positive: [    0,     0,     0,     0]
+      gripper_duty_ranges_negative: [    0,     0,     0,     0]
