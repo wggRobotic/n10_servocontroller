@@ -62,22 +62,22 @@ class ServoController(Node):
             10
         )
 
-        self.gripper_subscribtion = self.create_subscription(
-            Float32MultiArray,
-            'gripper/cmd',
-            self.arm_control_callback,
-            10
-        )
+        # self.gripper_subscribtion = self.create_subscription(
+        #     Float32MultiArray,
+        #     'gripper/cmd',
+        #     self.arm_control_callback,
+        #     10
+        # )
 
-        self.wheels_feedback_publisher = self.create_publisher(
-            Float32MultiArray,
-            'wheels/angle/feedback',
-        )
+        # self.wheels_feedback_publisher = self.create_publisher(
+        #     Float32MultiArray,
+        #     'wheels/angle/feedback',
+        # )
 
-        self.gripper_feedback_publisher = self.create_publisher(
-            Float32MultiArray,
-            'wheels/angle/feedback',
-        )
+        # self.gripper_feedback_publisher = self.create_publisher(
+        #     Float32MultiArray,
+        #     'wheels/angle/feedback',
+        # )
 
         self.get_logger().info('servocontroller started. listening ...')
 
@@ -86,7 +86,7 @@ class ServoController(Node):
 
     def wheels_angle_callback(self, msg):
         if len(msg.data) == 6:
-            set_wheel_angles
+            self.controller.set_wheel_angles(msg.data)
             
 def main(args=None):
     rclpy.init(args=args)
