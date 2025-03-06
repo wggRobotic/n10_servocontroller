@@ -1,0 +1,12 @@
+translator:
+  ros__parameters:
+    
+    verbosity: true
+
+    mode: "pca"
+
+    channel_mappings:    [    0,     1,     2,     3,     4,     5]
+    duty_mids:           [ 5200,  5200,  4900,  5000,  4800,  4800]
+    duty_range_positive: [-3600, -3500, -3400, -3400, -3400, -3500]
+    duty_range_negative: [-3100, -3300, -3200, -3400, -3400, -3400]
+
