@@ -10,6 +10,6 @@ n10:
       wheel_duty_ranges_negative: [-3100, -3300, -3200, -3400, -3400, -3400]
 
       gripper_channel_mappings:     [    6,     7,     8,     9]
-      gripper_duty_mids:            [ 5200,  5200,  4900,  5000]
-      gripper_duty_ranges_positive: [    0,     0,     0,     0]
-      gripper_duty_ranges_negative: [    0,     0,     0,     0]
+      gripper_duty_mids:            [ 4900,  5150,  5100,  5000]
+      gripper_duty_ranges_positive: [ 2300,  2250,  -2450,     0]
+      gripper_duty_ranges_negative: [ 2300,  2350,  -2200,     0]
