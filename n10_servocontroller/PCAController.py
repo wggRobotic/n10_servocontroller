@@ -46,9 +46,9 @@ class PCAController:
             duty_cycle = self.wheel_duty_mids[i]
 
             if angles[i] > 0:
-                duty_cycle += int(self.wheel_duty_ranges_positive[i] * angles[i] / math.pi)
+                duty_cycle += int(self.wheel_duty_ranges_positive[i] * angles[i] / math.pi * 2)
             else:
-                duty_cycle += int(self.wheel_duty_ranges_negative[i] * angles[i] / math.pi)
+                duty_cycle += int(self.wheel_duty_ranges_negative[i] * angles[i] / math.pi * 2)
 
             self.pca.channels[self.wheel_channel_mappings[i]].duty_cycle = duty_cycle
             self.wheel_angles[i] = angles[i]
@@ -63,9 +63,9 @@ class PCAController:
             duty_cycle = self.gripper_duty_mids[i]
 
             if angles[i] > 0:
-                duty_cycle += int(self.gripper_duty_ranges_positive[i] * angles[i] / math.pi)
+                duty_cycle += int(self.gripper_duty_ranges_positive[i] * angles[i] / math.pi * 2)
             else:
-                duty_cycle += int(self.gripper_duty_ranges_negative[i] * angles[i] / math.pi)
+                duty_cycle += int(self.gripper_duty_ranges_negative[i] * angles[i] / math.pi * 2)
 
             self.pca.channels[self.gripper_channel_mappings[i]].duty_cycle = duty_cycle
             self.gripper_angles[i] = angles[i]
