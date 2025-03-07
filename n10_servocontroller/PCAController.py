@@ -23,15 +23,15 @@ class PCAController:
         node.declare_parameter('gripper_duty_ranges_positive', [0, 0, 0, 0])
         node.declare_parameter('gripper_duty_ranges_negative', [0, 0, 0, 0])
 
-        self.wheel_channel_mappings =       node.get_parameter('wheel_channel_mappings').get_parameter_value().int_array
-        self.wheel_duty_mids =              node.get_parameter('wheel_duty_mids').get_parameter_value().int_array
-        self.wheel_duty_ranges_positive =   node.get_parameter('wheel_duty_ranges_positive').get_parameter_value().int_array
-        self.wheel_duty_ranges_negative =   node.get_parameter('wheel_duty_ranges_negative').get_parameter_value().int_array
+        self.wheel_channel_mappings =       node.get_parameter('wheel_channel_mappings').get_parameter_value().integer_array_value
+        self.wheel_duty_mids =              node.get_parameter('wheel_duty_mids').get_parameter_value().integer_array_value
+        self.wheel_duty_ranges_positive =   node.get_parameter('wheel_duty_ranges_positive').get_parameter_value().integer_array_value
+        self.wheel_duty_ranges_negative =   node.get_parameter('wheel_duty_ranges_negative').get_parameter_value().integer_array_value
 
-        self.gripper_channel_mappings =     node.get_parameter('gripper_channel_mappings').get_parameter_value().int_array
-        self.gripper_duty_mids =            node.get_parameter('gripper_duty_mids').get_parameter_value().int_array
-        self.gripper_duty_ranges_positive = node.get_parameter('gripper_duty_ranges_positive').get_parameter_value().int_array
-        self.gripper_duty_ranges_negative = node.get_parameter('gripper_duty_ranges_negative').get_parameter_value().int_array
+        self.gripper_channel_mappings =     node.get_parameter('gripper_channel_mappings').get_parameter_value().integer_array_value
+        self.gripper_duty_mids =            node.get_parameter('gripper_duty_mids').get_parameter_value().integer_array_value
+        self.gripper_duty_ranges_positive = node.get_parameter('gripper_duty_ranges_positive').get_parameter_value().integer_array_value
+        self.gripper_duty_ranges_negative = node.get_parameter('gripper_duty_ranges_negative').get_parameter_value().integer_array_value
 
         self.wheel_angles = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.gripper_angles = [0.0, 0.0, 0.0, 0.0]
