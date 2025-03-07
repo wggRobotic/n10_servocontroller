@@ -28,4 +28,6 @@ setup(
             'n10_servocontroller = n10_servocontroller.n10_servocontroller:main',
         ],
     },
+    package_data={package_name: ['PCAController.py']}
+
 )
