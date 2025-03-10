@@ -5,7 +5,7 @@ n10:
       mode: "pca"
 
       wheel_channel_mappings:     [    0,     1,     2,     3,     4,     5]
-      wheel_duty_mids:            [ 5200,  5200,  4900,  5000,  4800,  4800]
+      wheel_duty_mids:            [ 5400,  5200,  4800,  4800,  5000,  5000]
       wheel_duty_ranges_positive: [-3600, -3500, -3400, -3400, -3400, -3500]
       wheel_duty_ranges_negative: [-3100, -3300, -3200, -3400, -3400, -3400]
 
