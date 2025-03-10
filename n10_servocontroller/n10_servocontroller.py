@@ -1,6 +1,7 @@
 from adafruit_pca9685 import PCA9685
 from board import SCL, SDA
 import busio
+import RPi.GPIO as GPIO
 
 import rclpy
 from rclpy.node import Node
@@ -40,8 +41,13 @@ class PCAController:
         self.wheel_angles = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         self.gripper_angles = [0.0, 0.0, 0.0, 0.0]
 
-        #self.set_wheel_angles(self.wheel_angles)
-        #self.set_gripper_angles(self.gripper_angles)
+        self.OE_PIN = 21
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.OE_PIN, GPIO.OUT)
+
+        GPIO.output(self.OE_PIN, GPIO.LOW)
+
 
     def set_wheel_angles(self, angles):
         
@@ -77,16 +83,9 @@ class PCAController:
     def get_gripper_angles(self):
         return self.gripper_angles
 
-    def disable_wheel_servos(self):
-        for i in range(6):
-            self.pca.channels[self.wheel_channel_mappings[i]].duty_cycle = 100
+    def disable_servos(self):
+        GPIO.output(self.OE_PIN, GPIO.HIGH)
 
-    def disable_gripper_servos(self):
-        for i in range(4):
-            self.pca.channels[self.gripper_channel_mappings[i]].duty_cycle = 100
-
-
-#from n10_servocontroller import PCAController
 
 class N10ServoController(Node):
 
