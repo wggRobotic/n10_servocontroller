@@ -5,9 +5,9 @@ n10:
       mode: "pca"
 
       wheel_channel_mappings:     [    0,     1,     2,     3,     4,     5]
-      wheel_duty_mids:            [ 5400,  5200,  4800,  4800,  5000,  5000]
+      wheel_duty_mids:            [ 5700,  5500,  5100,  5100,  5400,  5300]
       wheel_duty_ranges_positive: [-3600, -3500, -3400, -3400, -3400, -3500]
-      wheel_duty_ranges_negative: [-3100, -3300, -3200, -3400, -3400, -3400]
+      wheel_duty_ranges_negative: [-3400, -3300, -3200, -3400, -3400, -3400]
 
       gripper_channel_mappings:     [    6,     7,     8,     9]
       gripper_duty_mids:            [ 5400,  5400,  5300,  4000]
